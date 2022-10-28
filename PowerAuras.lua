@@ -1159,14 +1159,6 @@ end
 function PowaAuras:DisplayAura(auraId)
 	--self:UnitTestInfo("DisplayAura", auraId);
 	--self:ShowText("DisplayAura aura ", auraId);
-	
-	--print("self.Initialising")
-	--print(self.Initialising)
-	--print("self.SetupDone")
-	--print(self.SetupDone)
-	--print("self.VariablesLoaded")
-	--print(self.VariablesLoaded)
-	
 	if (self.Initialising) then return; end   --- de-actived
 
 	local aura = self.Auras[auraId];

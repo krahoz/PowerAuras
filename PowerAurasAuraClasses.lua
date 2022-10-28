@@ -486,12 +486,10 @@ function cPowaAura:CheckState(giveReason)
 	end
 
 	--- dual spec check
-	--[[
 	if ((not self.spec2 and PowaAuras.ActiveTalentGroup == 2) or (not self.spec1 and PowaAuras.ActiveTalentGroup == 1)) then
 		if (not giveReason) then return false; end
 		return false, PowaAuras.Text.nomReasonNotForTalentSpec;
     end
-	]]
 	
 	--- mode combat
 	if ((PowaAuras.WeAreInCombat == true and self.combat == false) or (PowaAuras.WeAreInCombat == false and self.combat == true)) then
@@ -639,19 +637,11 @@ end
 function cPowaAura:ShouldShow(giveReason, reverse)
 	--PowaAuras:UnitTestInfo("ShouldShow", self.id);
 	--PowaAuras:ShowText("ShouldShow", self.id);
-	
-	--print("PowaMisc.Disabled")
-	--print(PowaMisc.Disabled)
-	
 	if (PowaMisc.Disabled) then
 		return false,  PowaAuras.Text.nomReasonDisabled;
 	end
 	--PowaAuras.AuraCheckCount = PowaAuras.AuraCheckCount + 1;
-	local stateResult, reason = self:CheckState(giveReason);
-	
-	--print("stateResult")
-	--print(stateResult) -- !!
-	
+	local stateResult, reason = self:CheckState(giveReason);	
 	if (not stateResult) then
 		self.InactiveDueToState = true;
 		return stateResult, reason;
@@ -2017,10 +2007,10 @@ function cPowaCombo:AddEffectAndEvents()
 end						  
 
 function cPowaCombo:CheckIfShouldShow(giveReason)
-	-- if (not(PowaAuras.playerclass == "ROGUE" or (PowaAuras.playerclass=="DRUID" and GetShapeshiftForm()==3))) then
-		-- if (not giveReason) then return nil; end
-		-- return nil, PowaAuras.Text.nomReasonNoUseCombo;
-	-- end
+	if not PowaAuras.playerclass == "ROGUE" and not (PowaAuras.playerclass == "DRUID" and GetShapeshiftForm()==3) and not PowaAuras.playerclass == "HERO" then
+		if (not giveReason) then return nil; end
+		return nil, PowaAuras.Text.nomReasonNoUseCombo;
+	end
 	PowaAuras:Debug("Check Combos");
 	local nCombo = tostring(GetComboPoints("player"));
 	--PowaAuras:UnitTestDebug("nCombo=", nCombo, " self.buffname=", self.buffname);
@@ -2300,9 +2290,9 @@ end
 
 function cPowaAuraStats:CheckUnit(unit)
 	PowaAuras:Debug("CheckUnit " .. unit);
-	-- if (not self:IsCorrectPowerType(unit)) then
-		-- return nil;
-	-- end			
+	if (not self:IsCorrectPowerType(unit)) then
+		return nil;
+	end			
 	if (UnitIsDeadOrGhost(unit)) then
 		--PowaAuras:UnitTestDebug("Correct powertype dead ", UnitIsDeadOrGhost(unit));
 		return false;
@@ -2854,13 +2844,15 @@ function cPowaPet:Init()
 		end
 	elseif (PowaAuras.playerclass == "MAGE") then
 		self.CanHaveTimerOnInverse=true;
+	elseif PowaAuras.playerclass == "HERO" then
+		self.CanHaveTimerOnInverse=true;
 	end
 end
 
 function cPowaPet:AddEffectAndEvents()
 	table.insert(PowaAuras.AurasByType.Pet, self.id);
 	PowaAuras.Events.UNIT_PET = true;
-	if (self.playerclass=="DEATHKNIGHT" and not self.MasterOfGhouls) then -- temporary Ghoul is a totem!
+	if ((self.playerclass=="DEATHKNIGHT" or self.playerclass == "HERO") and not self.MasterOfGhouls) then -- temporary Ghoul is a totem!
 		if (self.DebugEvents) then
 			self:ShowText("Ghoul (temp version)");
 		end

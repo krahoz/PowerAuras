@@ -1138,10 +1138,10 @@ function PowaAuras:InitPage()
 	PowaBarThresholdSlider:SetValue(aura.threshold);
 
 	-- dual specs
-	--self:EnableCheckBox("PowaTalentGroup1Button");
-	--self:EnableCheckBox("PowaTalentGroup2Button");
-	--PowaTalentGroup1Button:SetChecked(aura.spec1);
-	--PowaTalentGroup2Button:SetChecked(aura.spec2);
+	self:EnableCheckBox("PowaTalentGroup1Button");
+	self:EnableCheckBox("PowaTalentGroup2Button");
+	PowaTalentGroup1Button:SetChecked(aura.spec1);
+	PowaTalentGroup2Button:SetChecked(aura.spec2);
 	
 	self:EnableCheckBox("PowaAuraDebugButton");
 	PowaAuraDebugButton:SetChecked(aura.Debug);
@@ -2961,10 +2961,9 @@ end
 
 
 function PowaAuras:OptionTest()
-	
+
 	--self:Message("OptionTest for ", self.CurrentAuraId);
 	local aura = self.Auras[self.CurrentAuraId];
-
 	if (not aura or aura.buffname == "" or aura.buffname == " ") then
 		return;
 	end
