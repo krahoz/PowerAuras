@@ -47,8 +47,6 @@ function PowaAuras:VARIABLES_LOADED(...)
 		self:RegisterEvents(PowaAuras_Frame);
 	end
 	
-	--print("self.SetupDone")
-	--print(self.SetupDone)
 	if (self.SetupDone) then
 		self.Initialising = false;
 	end
@@ -98,10 +96,7 @@ function PowaAuras:Setup()
 	self:MemorizeActions();
 	
 	self.DoCheck.All = true;
-	
-	--print("self.VariablesLoaded")
-	--print(self.VariablesLoaded)
-	
+		
 	if (self.VariablesLoaded) then
 		self.Initialising = false;
 	end
@@ -576,6 +571,9 @@ function PowaAuras:PLAYER_TOTEM_UPDATE(...)
 				self:ShowText("Ghoul (temp version)");
 			end
 			self.DoCheck.Pet = true;
+		elseif self.playerclass == "HERO" then
+			self.DoCheck.Totems = true;
+			self.DoCheck.Pet = true;
 		end
 	end
 end
@@ -706,13 +704,7 @@ end
 
 function PowaAuras:GetStances()
 	for iForm=1, GetNumShapeshiftForms() do
-		-- Fix for warlock metamorphosis
-		if (self.playerclass=="WARLOCK") then
-			self.PowaStance[1] = "";
-			self.PowaStance[2] = select(2,GetShapeshiftFormInfo(1));
-		else
-			self.PowaStance[iForm] = select(2,GetShapeshiftFormInfo(iForm));
-		end
+		self.PowaStance[iForm] = select(2,GetShapeshiftFormInfo(iForm));
 	end
 end
 	
